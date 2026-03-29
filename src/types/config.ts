@@ -32,4 +32,5 @@ export interface AppConfig {
   editor: EditorConfig;
   recent_files: RecentFile[];
   ai?: AiConfig;
+  keyboard_shortcuts?: { [id: string]: string };
 }

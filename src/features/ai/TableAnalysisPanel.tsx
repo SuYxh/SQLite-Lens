@@ -10,19 +10,19 @@ export function TableAnalysisPanel() {
   const tableAnalysis = useAiStore((s) => s.tableAnalysis);
   const analyzeTable = useAiStore((s) => s.analyzeTable);
   const activeDbId = useDatabaseStore((s) => s.activeDbId);
-  const selectedTable = useTableStore((s) => s.selectedTable);
+  const activeTable = useTableStore((s) => s.activeTable);
 
-  const analysis = selectedTable ? tableAnalysis[selectedTable] : null;
+  const analysis = activeTable ? tableAnalysis[activeTable] : null;
 
   useEffect(() => {
-    if (isConfigured && activeDbId && selectedTable && !analysis && !isAnalyzing) {
-      analyzeTable(activeDbId, selectedTable);
+    if (isConfigured && activeDbId && activeTable && !analysis && !isAnalyzing) {
+      analyzeTable(activeDbId, activeTable);
     }
-  }, [isConfigured, activeDbId, selectedTable, analysis, isAnalyzing, analyzeTable]);
+  }, [isConfigured, activeDbId, activeTable, analysis, isAnalyzing, analyzeTable]);
 
   const handleRefresh = () => {
-    if (!activeDbId || !selectedTable) return;
-    analyzeTable(activeDbId, selectedTable);
+    if (!activeDbId || !activeTable) return;
+    analyzeTable(activeDbId, activeTable);
   };
 
   if (!isConfigured) {
@@ -35,7 +35,7 @@ export function TableAnalysisPanel() {
     );
   }
 
-  if (!selectedTable) {
+  if (!activeTable) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
         <Brain className="h-8 w-8 text-[var(--color-text-muted)]" />
@@ -48,7 +48,7 @@ export function TableAnalysisPanel() {
     return (
       <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
         <Loader2 className="h-8 w-8 animate-spin text-[var(--color-accent)]" />
-        <p className="text-sm text-[var(--color-text-secondary)]">正在分析表 {selectedTable}...</p>
+        <p className="text-sm text-[var(--color-text-secondary)]">正在分析表 {activeTable}...</p>
         <p className="text-xs text-[var(--color-text-muted)]">AI 正在检查表结构、数据质量和索引</p>
       </div>
     );
@@ -75,7 +75,7 @@ export function TableAnalysisPanel() {
         <div className="flex items-center gap-2">
           <Brain className="h-4 w-4 text-[var(--color-accent)]" />
           <span className="text-sm font-medium text-[var(--color-text-primary)]">
-            表分析: {selectedTable}
+            表分析: {activeTable}
           </span>
         </div>
         <div className="flex items-center gap-2">

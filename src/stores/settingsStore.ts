@@ -69,7 +69,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
           editorFontSize: config.editor.font_size ?? 14,
           editorFontFamily: config.editor.font_family ?? 'JetBrains Mono, Fira Code, monospace',
           editorTabSize: config.editor.tab_size ?? 2,
-          editorWordWrap: config.editor.word_wrap !== false,
+          editorWordWrap: config.editor.word_wrap === 'on',
           editorMinimap: config.editor.minimap ?? false,
         });
       }

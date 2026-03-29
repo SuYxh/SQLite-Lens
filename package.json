@@ -2,6 +2,7 @@
   "name": "sqlite-lens",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@7.33.7",
   "type": "module",
   "scripts": {
     "dev": "vite",

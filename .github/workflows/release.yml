@@ -38,12 +38,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build (Apple Silicon)
-        run: cargo tauri build --target aarch64-apple-darwin
+        run: pnpm tauri build --target aarch64-apple-darwin
         env:
           TAURI_SIGNING_PRIVATE_KEY: ""
 
       - name: Build (Intel)
-        run: cargo tauri build --target x86_64-apple-darwin
+        run: pnpm tauri build --target x86_64-apple-darwin
         env:
           TAURI_SIGNING_PRIVATE_KEY: ""
 

@@ -15,7 +15,6 @@ export function DataQaPanel({ onExecuteSql }: DataQaPanelProps) {
   const qaConversation = useAiStore((s) => s.qaConversation);
   const dataQa = useAiStore((s) => s.dataQa);
   const clearQaConversation = useAiStore((s) => s.clearQaConversation);
-  const lastSuggestion = useAiStore((s) => s.lastSuggestion);
   const activeDbId = useDatabaseStore((s) => s.activeDbId);
   const activeTabId = useSqlEditorStore((s) => s.activeTabId);
   const updateContent = useSqlEditorStore((s) => s.updateContent);

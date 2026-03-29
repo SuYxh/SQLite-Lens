@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import clsx from 'clsx';
 import { Zap, Loader2, Copy, Check, ChevronDown, ChevronRight, X } from 'lucide-react';
 import { useAiStore } from '@/stores/aiStore';
 import { useDatabaseStore } from '@/stores/databaseStore';

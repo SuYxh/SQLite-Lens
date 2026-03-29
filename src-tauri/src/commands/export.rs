@@ -31,7 +31,10 @@ pub fn export_json(
     match format.as_str() {
         "array" => JsonExporter::export_array(conn, &query, &path),
         "records" => JsonExporter::export_records(conn, &query, &path),
-        _ => Err(format!("Unknown format: {}. Use 'array' or 'records'.", format)),
+        _ => Err(format!(
+            "Unknown format: {}. Use 'array' or 'records'.",
+            format
+        )),
     }
 }
 

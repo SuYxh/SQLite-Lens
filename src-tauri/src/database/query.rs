@@ -43,11 +43,7 @@ impl QueryExecutor {
 
         let mut stmt = conn.prepare(&sql)?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = stmt.column_count();
         let rows: Vec<Vec<serde_json::Value>> = stmt
@@ -75,11 +71,7 @@ impl QueryExecutor {
         let start = Instant::now();
         let mut stmt = conn.prepare(sql)?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = stmt.column_count();
         let rows: Vec<Vec<serde_json::Value>> = stmt
@@ -119,9 +111,7 @@ impl QueryExecutor {
         })
     }
 
-    fn sqlite_value_to_json(
-        value: Option<rusqlite::types::ValueRef<'_>>,
-    ) -> serde_json::Value {
+    fn sqlite_value_to_json(value: Option<rusqlite::types::ValueRef<'_>>) -> serde_json::Value {
         match value {
             Some(rusqlite::types::ValueRef::Null) | None => serde_json::Value::Null,
             Some(rusqlite::types::ValueRef::Integer(i)) => serde_json::json!(i),

@@ -117,9 +117,7 @@ pub fn get_builtin_platforms() -> Vec<PlatformDefinition> {
             api_key_url: "https://console.anthropic.com/settings/keys".into(),
             description: "Claude 系列模型，长上下文和代码理解能力顶尖".into(),
             protocol: ApiProtocol::Anthropic,
-            default_headers: vec![
-                ("anthropic-version".into(), "2023-06-01".into()),
-            ],
+            default_headers: vec![("anthropic-version".into(), "2023-06-01".into())],
             models: vec![
                 ModelPreset {
                     id: "claude-sonnet-4-20250514".into(),

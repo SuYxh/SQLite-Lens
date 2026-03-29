@@ -14,17 +14,16 @@ impl CsvExporter {
         let delim = delimiter.unwrap_or(b',') as char;
         let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = columns.len();
 
         let mut file = File::create(path).map_err(|e| e.to_string())?;
 
-        let header_fields: Vec<String> = columns.iter().map(|c| Self::escape_field(c, delim)).collect();
+        let header_fields: Vec<String> = columns
+            .iter()
+            .map(|c| Self::escape_field(c, delim))
+            .collect();
         writeln!(file, "{}", header_fields.join(&delim.to_string())).map_err(|e| e.to_string())?;
 
         let rows = stmt
@@ -52,7 +51,10 @@ impl CsvExporter {
         let mut row_count = 0usize;
         for row_result in rows {
             let values = row_result.map_err(|e| e.to_string())?;
-            let fields: Vec<String> = values.iter().map(|v| Self::escape_field(v, delim)).collect();
+            let fields: Vec<String> = values
+                .iter()
+                .map(|v| Self::escape_field(v, delim))
+                .collect();
             writeln!(file, "{}", fields.join(&delim.to_string())).map_err(|e| e.to_string())?;
             row_count += 1;
         }

@@ -4,18 +4,10 @@ use rust_xlsxwriter::{Format, Workbook};
 pub struct ExcelExporter;
 
 impl ExcelExporter {
-    pub fn export(
-        conn: &Connection,
-        query: &str,
-        path: &str,
-    ) -> Result<usize, String> {
+    pub fn export(conn: &Connection, query: &str, path: &str) -> Result<usize, String> {
         let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = columns.len();
 
@@ -29,7 +21,7 @@ impl ExcelExporter {
                 .write_string_with_format(0, col_idx as u16, col_name, &bold_format)
                 .map_err(|e| e.to_string())?;
 
-            let width = (col_name.len() as f64).max(8.0).min(50.0);
+            let width = (col_name.len() as f64).clamp(8.0, 50.0);
             worksheet
                 .set_column_width(col_idx as u16, width)
                 .map_err(|e| e.to_string())?;

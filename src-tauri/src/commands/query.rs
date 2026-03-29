@@ -75,8 +75,10 @@ pub fn insert_row(
     );
 
     let params: Vec<SqlValue> = values.values().map(json_value_to_sql_param).collect();
-    let param_refs: Vec<&dyn rusqlite::types::ToSql> =
-        params.iter().map(|p| p as &dyn rusqlite::types::ToSql).collect();
+    let param_refs: Vec<&dyn rusqlite::types::ToSql> = params
+        .iter()
+        .map(|p| p as &dyn rusqlite::types::ToSql)
+        .collect();
 
     conn.execute(&sql, param_refs.as_slice())
         .map_err(|e| e.to_string())?;
@@ -106,9 +108,14 @@ pub fn delete_rows(
         placeholders.join(", ")
     );
 
-    let params: Vec<SqlValue> = primary_key_values.iter().map(json_value_to_sql_param).collect();
-    let param_refs: Vec<&dyn rusqlite::types::ToSql> =
-        params.iter().map(|p| p as &dyn rusqlite::types::ToSql).collect();
+    let params: Vec<SqlValue> = primary_key_values
+        .iter()
+        .map(json_value_to_sql_param)
+        .collect();
+    let param_refs: Vec<&dyn rusqlite::types::ToSql> = params
+        .iter()
+        .map(|p| p as &dyn rusqlite::types::ToSql)
+        .collect();
 
     let affected = conn
         .execute(&sql, param_refs.as_slice())

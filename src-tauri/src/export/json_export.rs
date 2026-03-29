@@ -6,27 +6,19 @@ use std::io::Write;
 pub struct JsonExporter;
 
 impl JsonExporter {
-    pub fn export_array(
-        conn: &Connection,
-        query: &str,
-        path: &str,
-    ) -> Result<usize, String> {
+    pub fn export_array(conn: &Connection, query: &str, path: &str) -> Result<usize, String> {
         let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = columns.len();
 
         let rows = stmt
             .query_map([], |row| {
                 let mut obj = Map::new();
-                for i in 0..column_count {
+                for (i, col) in columns.iter().enumerate().take(column_count) {
                     let value = Self::sqlite_to_json(row.get_ref(i).ok());
-                    obj.insert(columns[i].clone(), value);
+                    obj.insert(col.clone(), value);
                 }
                 Ok(Value::Object(obj))
             })
@@ -48,18 +40,10 @@ impl JsonExporter {
         Ok(row_count)
     }
 
-    pub fn export_records(
-        conn: &Connection,
-        query: &str,
-        path: &str,
-    ) -> Result<usize, String> {
+    pub fn export_records(conn: &Connection, query: &str, path: &str) -> Result<usize, String> {
         let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
 
-        let columns: Vec<String> = stmt
-            .column_names()
-            .iter()
-            .map(|n| n.to_string())
-            .collect();
+        let columns: Vec<String> = stmt.column_names().iter().map(|n| n.to_string()).collect();
 
         let column_count = columns.len();
 

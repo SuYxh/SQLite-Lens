@@ -194,7 +194,6 @@ impl PromptBuilder {
 6. Keep the summary brief but informative"#
     }
 
-
     pub fn text_to_sql_system(schema: &SchemaContext) -> String {
         format!(
             r#"You are a SQLite SQL expert. Generate valid SQLite SQL queries based on user's natural language descriptions.

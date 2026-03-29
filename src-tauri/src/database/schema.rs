@@ -43,9 +43,8 @@ impl SchemaReader {
     }
 
     fn read_views(conn: &Connection) -> Result<Vec<ViewInfo>> {
-        let mut stmt = conn.prepare(
-            "SELECT name, sql FROM sqlite_master WHERE type='view' ORDER BY name",
-        )?;
+        let mut stmt =
+            conn.prepare("SELECT name, sql FROM sqlite_master WHERE type='view' ORDER BY name")?;
 
         let views = stmt
             .query_map([], |row| {
@@ -72,8 +71,7 @@ impl SchemaReader {
 
         let mut indexes = Vec::new();
         for (name, table_name) in index_basics {
-            let mut info_stmt =
-                conn.prepare(&format!("PRAGMA index_list(\"{}\")", table_name))?;
+            let mut info_stmt = conn.prepare(&format!("PRAGMA index_list(\"{}\")", table_name))?;
             let is_unique = info_stmt
                 .query_map([], |row| {
                     let idx_name: String = row.get(1)?;
@@ -85,8 +83,7 @@ impl SchemaReader {
                 .map(|(_, u)| u)
                 .unwrap_or(false);
 
-            let mut col_stmt =
-                conn.prepare(&format!("PRAGMA index_info(\"{}\")", name))?;
+            let mut col_stmt = conn.prepare(&format!("PRAGMA index_info(\"{}\")", name))?;
             let columns: Vec<String> = col_stmt
                 .query_map([], |row| row.get(2))?
                 .filter_map(|r| r.ok())

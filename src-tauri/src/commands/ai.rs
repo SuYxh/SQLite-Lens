@@ -84,7 +84,10 @@ pub async fn ai_generate_sql(
     let response = provider.chat_completion(messages, options).await?;
     let sql = extract_sql_from_response(&response);
 
-    Ok(AiResponse { content: response, sql })
+    Ok(AiResponse {
+        content: response,
+        sql,
+    })
 }
 
 #[tauri::command]
@@ -309,10 +312,7 @@ pub async fn ai_analyze_table(
             .map_err(|e| e.to_string())?;
         let columns: Vec<(String, String)> = col_stmt
             .query_map([], |row| {
-                Ok((
-                    row.get::<_, String>(1)?,
-                    row.get::<_, String>(2)?,
-                ))
+                Ok((row.get::<_, String>(1)?, row.get::<_, String>(2)?))
             })
             .map_err(|e| e.to_string())?
             .filter_map(|r| r.ok())
@@ -326,7 +326,10 @@ pub async fn ai_analyze_table(
             )
             .unwrap_or(0);
 
-        stats.push_str(&format!("Table: {}\nTotal rows: {}\n\n", table_name, row_count));
+        stats.push_str(&format!(
+            "Table: {}\nTotal rows: {}\n\n",
+            table_name, row_count
+        ));
 
         for (col_name, col_type) in &columns {
             let null_count: i64 = conn
@@ -366,16 +369,16 @@ pub async fn ai_analyze_table(
             ));
         }
 
-        let sample_sql = format!(
-            "SELECT * FROM \"{}\" ORDER BY RANDOM() LIMIT 5",
-            table_name
-        );
+        let sample_sql = format!("SELECT * FROM \"{}\" ORDER BY RANDOM() LIMIT 5", table_name);
         if let Ok(mut sample_stmt) = conn.prepare(&sample_sql) {
             let col_count = sample_stmt.column_count();
             let col_names: Vec<String> = (0..col_count)
                 .map(|i| sample_stmt.column_name(i).unwrap_or("?").to_string())
                 .collect();
-            stats.push_str(&format!("\nSample data (5 rows):\n{}\n", col_names.join(" | ")));
+            stats.push_str(&format!(
+                "\nSample data (5 rows):\n{}\n",
+                col_names.join(" | ")
+            ));
 
             if let Ok(mut rows) = sample_stmt.query([]) {
                 while let Ok(Some(row)) = rows.next() {
@@ -420,10 +423,7 @@ pub async fn ai_analyze_table(
         },
         ChatMessage {
             role: "user".to_string(),
-            content: format!(
-                "请分析以下表的结构和数据特征:\n\n{}",
-                table_stats
-            ),
+            content: format!("请分析以下表的结构和数据特征:\n\n{}", table_stats),
         },
     ];
 
@@ -501,7 +501,10 @@ pub async fn ai_data_qa(
     let response = provider.chat_completion(messages, options).await?;
     let sql = extract_sql_from_response(&response);
 
-    Ok(AiResponse { content: response, sql })
+    Ok(AiResponse {
+        content: response,
+        sql,
+    })
 }
 
 #[tauri::command]
